@@ -1,0 +1,17 @@
+.message-box-header {
+  display: flex;
+  justify-content: space-between;
+}
+.message-wapper {
+  padding: 3px;
+  width: 55%;
+}
+.message-wapper-right {
+  padding: 3px;
+  width: 55%;
+  float: right;
+}
+.avatar-img {
+  margin: 0 1rem;
+  border-radius: 100px;
+}

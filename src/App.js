@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Button from "./components/Button";
+
 import Channel from "./components/Channel";
 import "./App.css";
+import {} from "semantic-ui-react";
+import { Dimmer, Loader } from "semantic-ui-react";
+import SignIn from "./components/SignIn";
+import NavBar from "./components/NavBar";
 
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(1),
-    color: "blue",
-    textAlign: "center",
-    height: "100vh",
-  },
-}));
 
 firebase.initializeApp({
   apiKey: "AIzaSyB9Zh-j_0ORyoLTKTm5CmmAdsEl698tvJg",
@@ -35,9 +24,9 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const db = firebase.firestore();
 function App() {
-  const classes = useStyles();
   const [user, setUser] = useState(() => auth.currentUser);
   const [initializing, setInitializing] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -59,60 +48,43 @@ function App() {
 
     auth.useDeviceLanguage();
     try {
+      setLoading(true);
       await auth.signInWithPopup(provider);
-      console.log("hi");
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   const signOut = async () => {
     try {
+      setLoading(true);
       await firebase.auth().signOut();
+      setLoading(false);
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   };
 
   if (initializing)
     return (
-      <p style={{ color: "white", textAlign: "center" }}>Loading chat..</p>
+      <Dimmer active>
+        <Loader> fetching messages...</Loader>
+      </Dimmer>
     );
 
   return (
     <div style={{ color: "black" }}>
       {user ? (
         <>
-          <div className="navbar">
-            <ul>
-              <li>
-                {" "}
-                <h2>BuzzChat</h2>
-              </li>
-
-              <li className="signOut">
-                <Button onClick={signOut}> Sign out </Button>
-              </li>
-            </ul>
-          </div>
-          <br />
+          <NavBar user={user} loading={loading} signOut={signOut} />
 
           <Channel user={user} db={db} />
         </>
       ) : (
-        <Grid container spacing={1} justify="center">
-          <Grid item xs={11} sm={6}>
-            <Paper className={classes.paper}>
-              <div className="signInButton">
-                <h1 className="signInHeader">Welcome to BuzChat</h1>
-                <Button className="signInButton" onClick={signInWithGoogle}>
-                  {" "}
-                  Sign in with google{" "}
-                </Button>
-              </div>
-            </Paper>
-          </Grid>
-        </Grid>
+        <SignIn signInWithGoogle={signInWithGoogle} />
       )}
     </div>
   );

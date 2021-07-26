@@ -1,68 +1,16 @@
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: rgb(52, 197, 255);
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover:not(.active) {
-  background-color: #111;
-}
-
-.active {
-  background-color: #4caf50;
-}
-.signOut {
-  float: right;
-  margin-top: 15px;
-  background-color: white;
-  margin-right: 10px;
-  border-radius: 10px;
-}
 .messageContiner {
   padding: 0 2rem;
 }
 .messageScroller {
-  height: 80vh;
+  height: 70vh;
 
-  overflow: scroll;
+  overflow: auto;
+  overflow-x: hidden;
 }
-.formContainer {
+
+.message-field {
   width: 100%;
 }
-.inputField {
-  width: 90%;
-  height: 56px;
-}
-.sendButton {
-  width: 8%;
-  height: 56px;
-  margin-left: 5px;
-  color: rgb(0, 0, 0);
-  background-color: chartreuse;
-  border-radius: 50%;
-}
-.signInButton {
-  color: blue;
-}
-.signInContainer {
-  color: rgb(0, 0, 0) !important;
-  text-align: center;
-}
-.signInHeader {
-  margin-top: 40%;
-  color: black !important;
+
+.send-message-wrapper {
 }

@@ -1,8 +1,14 @@
 import React from "react";
-import Buttons from "@material-ui/core/Button";
 
-const Button = ({ onClick = null, children = null }) => (
-  <Buttons onClick={onClick} variant="contained" color="primary">
+import { Button as Buttons } from "semantic-ui-react";
+
+const Button = ({ onClick = null, children = null, loading = null }) => (
+  <Buttons
+    loading={loading}
+    onClick={onClick}
+    variant="contained"
+    color="primary"
+  >
     {children}
   </Buttons>
 );

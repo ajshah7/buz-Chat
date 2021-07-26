@@ -1,32 +1,21 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import Message from "./Message";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
+import { Grid, Form, Segment, Dimmer, Loader } from "semantic-ui-react";
+import "./styles.scss";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(1),
-    backgroundColor: "transparent",
-
-    color: theme.palette.text.secondary,
-  },
-}));
+var notificationSound = new Audio(
+  "https://assets.mixkit.co/sfx/preview/mixkit-happy-bells-notification-937.mp3"
+);
 
 function Channel({ user, db }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [color, setColor] = useState("");
-
-  const { uid, displayName, photoURL } = user;
+  const { uid, displayName, email, photoURL } = user;
   useEffect(() => {
-    var messageBody = document.querySelector("#messageBody");
-    messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+    setLoading(true);
     if (db) {
       const unsubscribe = db
         .collection("messages")
@@ -38,8 +27,12 @@ function Channel({ user, db }) {
             id: doc.id,
           }));
           setMessages(data);
-          console.log("*", messages);
+          setNewMessage("");
+          var objDiv = document.getElementById("messageBody");
+          objDiv.scrollTop = objDiv.scrollHeight;
+          notificationSound.play();
         });
+      setLoading(false);
       return unsubscribe;
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,14 +44,6 @@ function Channel({ user, db }) {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    const colors = [
-      { color: "red" },
-      { color: "green" },
-      { color: "blue" },
-      { color: "yellow" },
-    ];
-
-    colors.map((color) => setColor(color));
 
     if (db) {
       db.collection("messages").add({
@@ -67,47 +52,51 @@ function Channel({ user, db }) {
         uid,
         displayName,
         photoURL,
-        color,
+        email,
       });
     }
   };
-  const classes = useStyles();
-  return (
-    <>
-      <div className="messageScroller" id="messageBody">
-        {messages.map((message) => (
-          <div key={message.id}>
-            {" "}
-            <Message {...message} />
-          </div>
-        ))}
-      </div>
 
-      <Grid container spacing={1} justify="center">
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>
-            <form onSubmit={handleOnSubmit} className="formContainer">
-              <input
-                className="inputField"
+  return (
+    <Grid columns={1} centered>
+      {loading ? (
+        <Dimmer active>
+          <Loader> please wait...</Loader>
+        </Dimmer>
+      ) : null}
+      <Grid.Column>
+        <Segment>
+          <div className="messageScroller" id="messageBody">
+            {messages.map((message) => (
+              <div key={message.id}>
+                <Message user={user} {...message} />
+              </div>
+            ))}
+          </div>
+        </Segment>
+      </Grid.Column>
+      <Grid.Column computer={8} mobile={16} className="send-message-wrapper">
+        <Segment>
+          <Form onSubmit={handleOnSubmit}>
+            <Form.Group>
+              <Form.Input
+                className="message-field"
                 type="text"
                 name="message"
                 value={newMessage}
                 onChange={handleOnChange}
                 placeholder="Enter you messages"
               />
-              <button
-                className="sendButton"
+              <Form.Button
+                content="Send"
                 type="submit"
                 disabled={!newMessage}
-              >
-                {" "}
-                Sent
-              </button>
-            </form>
-          </Paper>
-        </Grid>
-      </Grid>
-    </>
+              />
+            </Form.Group>
+          </Form>
+        </Segment>
+      </Grid.Column>
+    </Grid>
   );
 }
 
