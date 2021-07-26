@@ -42,6 +42,7 @@ function Channel({ user, db }) {
         });
       return unsubscribe;
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db]);
 
   const handleOnChange = (e) => {

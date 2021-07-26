@@ -51,7 +51,9 @@ function App() {
       }
     });
     return unsubscribe;
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const signInWithGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
 
