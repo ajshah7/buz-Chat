@@ -85,6 +85,7 @@ function Channel({ user, db }) {
                 placeholder="Enter you messages"
               />
               <Form.Button
+                floated="right"
                 className="btn"
                 content="Send"
                 type="submit"
