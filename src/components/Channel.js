@@ -4,10 +4,6 @@ import Message from "./Message";
 import { Grid, Form, Segment, Dimmer, Loader } from "semantic-ui-react";
 import "./styles.scss";
 
-var notificationSound = new Audio(
-  "https://assets.mixkit.co/sfx/preview/mixkit-happy-bells-notification-937.mp3"
-);
-
 function Channel({ user, db }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -27,10 +23,10 @@ function Channel({ user, db }) {
             id: doc.id,
           }));
           setMessages(data);
-          setNewMessage("");
+
           var objDiv = document.getElementById("messageBody");
           objDiv.scrollTop = objDiv.scrollHeight;
-          notificationSound.play();
+          navigator.vibrate(200);
         });
       setLoading(false);
       return unsubscribe;
@@ -54,6 +50,7 @@ function Channel({ user, db }) {
         photoURL,
         email,
       });
+      setNewMessage("");
     }
   };
 
@@ -88,6 +85,7 @@ function Channel({ user, db }) {
                 placeholder="Enter you messages"
               />
               <Form.Button
+                className="btn"
                 content="Send"
                 type="submit"
                 disabled={!newMessage}

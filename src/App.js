@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import Channel from "./components/Channel";
-import "./App.css";
+import "./App.scss";
 import {} from "semantic-ui-react";
 import { Dimmer, Loader } from "semantic-ui-react";
 import SignIn from "./components/SignIn";

@@ -1,0 +1,31 @@
+.messageContiner {
+  padding: 0 2rem;
+}
+.messageScroller {
+  @media (min-width: 640px) {
+    height: 70vh;
+  }
+  @media (max-width: 640px) {
+    height: 60vh;
+  }
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.message-field {
+  width: 100%;
+}
+
+.send-message-wrapper {
+  @media (min-width: 640px) {
+    position: fixed !important;
+    bottom: 0;
+  }
+  @media (max-width: 640px) {
+    position: fixed !important;
+    bottom: 120px;
+    .btn {
+      float: right !important;
+    }
+  }
+}
